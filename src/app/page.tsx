@@ -1,103 +1,169 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [form, setForm] = useState({
+    fullName: "",
+    cpf: "",
+    street: "",
+    number: "",
+    neighborhood: "",
+    complement: "",
+    city: "",
+    state: "",
+    phone: "",
+    email: "",
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    await fetch("/lead", {
+      method: "POST",
+      body: JSON.stringify(form),
+    });
+    setSuccess(true);
+    setForm({
+      fullName: "",
+      cpf: "",
+      street: "",
+      number: "",
+      neighborhood: "",
+      complement: "",
+      city: "",
+      state: "",
+      phone: "",
+      email: "",
+    });
+  };
+
+  return (
+    <main className="max-w-xl mx-auto py-10 px-4">
+      <Image
+        src="/logo.png"
+        alt="Logo"
+        width={500}
+        height={150}
+        className="mx-auto"
+      />
+      <h1 className="text-3xl font-bold text-center mt-6">
+        Energia & Semelhança
+      </h1>
+
+      <h2 className="text-2xl font-semibold mt-10 mb-4">
+        Apresentação do Projeto de Palestra: “Energia e Semelhança”
+      </h2>
+
+      <p className="text-justify leading-relaxed mt-4">
+        O projeto de palestra intitulado “Energia e Semelhança” será ministrado
+        por Bim da Ambulância, um homem que desempenha diversos papéis em sua
+        vida: Filho, Pai, Marido, Empreendedor, Administrador, Piloto e Deputado
+        Estadual. Nessa palestra, Bim compartilhará sua trajetória de vida,
+        repleta de desafios e conquistas, até alcançar a realização pessoal e
+        profissional que vive hoje.
+      </p>
+
+      <p className="text-justify leading-relaxed mt-4">
+        Ao longo de sua apresentação, Bim fará uma reflexão sobre suas
+        experiências, abordando como cada fase de sua vida o moldou e o ajudou a
+        encontrar seu propósito. Ele falará sobre o impacto da energia que
+        coloca em cada ação e a semelhança entre os desafios enfrentados ao
+        longo de sua jornada, sempre com foco na superação e no crescimento.
+      </p>
+
+      <p className="text-justify leading-relaxed mt-4">
+        Com um olhar profundo sobre os aspectos familiares, empreendedores e
+        políticos de sua vida, Bim mostrará como os valores de perseverança,
+        resiliência e dedicação foram fundamentais para se tornar o homem
+        realizado que é hoje. Esta palestra será uma oportunidade única de
+        entender como a união desses elementos pode levar à transformação
+        pessoal e ao sucesso.
+      </p>
+
+      <p className="text-justify leading-relaxed mt-4">
+        A apresentação de “Energia e Semelhança” é uma poderosa reflexão sobre o
+        poder da perseverança e da energia vital que nos impulsiona em nossa
+        caminhada, destacando a importância de se manter fiel aos próprios
+        valores e sempre buscar evoluir, independentemente das adversidades.
+      </p>
+
+      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+        <input
+          placeholder="Nome completo"
+          value={form.fullName}
+          onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="CPF"
+          value={form.cpf}
+          onChange={(e) => setForm({ ...form, cpf: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Rua"
+          value={form.street}
+          onChange={(e) => setForm({ ...form, street: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Número"
+          value={form.number}
+          onChange={(e) => setForm({ ...form, number: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Bairro"
+          value={form.neighborhood}
+          onChange={(e) => setForm({ ...form, neighborhood: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Complemento"
+          value={form.complement}
+          onChange={(e) => setForm({ ...form, complement: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Cidade"
+          value={form.city}
+          onChange={(e) => setForm({ ...form, city: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Estado"
+          value={form.state}
+          onChange={(e) => setForm({ ...form, state: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Telefone"
+          value={form.phone}
+          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+
+        <button
+          type="submit"
+          className="bg-red-600 text-white px-4 py-2 rounded w-full"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          Enviar
+        </button>
+
+        {success && (
+          <p className="text-green-600 text-center">
+            Lead cadastrado com sucesso!
+          </p>
+        )}
+      </form>
+    </main>
   );
 }
