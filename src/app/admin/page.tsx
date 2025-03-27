@@ -6,47 +6,69 @@ export default async function AdminPage() {
   const leads = await Lead.find().sort({ createdAt: -1 });
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Leads cadastrados</h1>
-      <div className="space-y-4">
-        {leads.map((lead: any) => (
-          <div key={lead._id} className="border p-4 rounded shadow">
-            <p>
-              <strong>Nome:</strong> {lead.fullName}
-            </p>
-            <p>
-              <strong>CPF:</strong> {lead.cpf}
-            </p>
-            <p>
-              <strong>Rua:</strong> {lead.street}
-            </p>
-            <p>
-              <strong>Número:</strong> {lead.number}
-            </p>
-            <p>
-              <strong>Bairro:</strong> {lead.neighborhood}
-            </p>
-            <p>
-              <strong>Complemento:</strong> {lead.complement}
-            </p>
-            <p>
-              <strong>Cidade:</strong> {lead.city}
-            </p>
-            <p>
-              <strong>Estado:</strong> {lead.state}
-            </p>
-            <p>
-              <strong>Telefone:</strong> {lead.phone}
-            </p>
-            <p>
-              <strong>Email:</strong> {lead.email}
-            </p>
-            <p>
-              <strong>Data:</strong> {new Date(lead.createdAt).toLocaleString()}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <html lang="en">
+      <body className="bg-black text-white min-h-screen p-8">
+        <h1 className="text-2xl font-bold mb-6">Leads cadastrados</h1>
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-700 text-sm">
+            <thead className="bg-gray-800 text-white">
+              <tr>
+                <th className="p-3 border border-gray-700 text-left">Nome</th>
+                <th className="p-3 border border-gray-700 text-left">CPF</th>
+                <th className="p-3 border border-gray-700 text-left">Email</th>
+                <th className="p-3 border border-gray-700 text-left">
+                  Telefone
+                </th>
+                <th className="p-3 border border-gray-700 text-left">
+                  Endereço
+                </th>
+                <th className="p-3 border border-gray-700 text-left">Cidade</th>
+                <th className="p-3 border border-gray-700 text-left">Estado</th>
+                <th className="p-3 border border-gray-700 text-left">Data</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800 bg-gray-900 text-white">
+              {leads.map((lead: any) => (
+                <tr key={lead._id} className="hover:bg-gray-800">
+                  <td className="p-3 border border-gray-700">
+                    {lead.fullName || "-"}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {lead.cpf || "-"}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {lead.email || "-"}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {lead.phone || "-"}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {[
+                      lead.street,
+                      lead.number,
+                      lead.neighborhood,
+                      lead.complement,
+                    ]
+                      .filter(Boolean)
+                      .join(", ") || "-"}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {lead.city || "-"}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {lead.state || "-"}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {lead.createdAt
+                      ? new Date(lead.createdAt).toLocaleString("pt-BR")
+                      : "-"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </body>
+    </html>
   );
 }

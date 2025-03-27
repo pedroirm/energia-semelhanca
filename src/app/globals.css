@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
+/* Variáveis de cor padrão (tema escuro por padrão) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: theme(colors.black);
+  --foreground: theme(colors.white);
 }
 
+/* Definição de temas inline (Tailwind Theme Extension opcional) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,15 +14,19 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Aplica o tema ao HTML e Body */
+html,
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Se quiser modo escuro automático baseado no sistema do usuário: (opcional) */
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+*/
