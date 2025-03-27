@@ -1,4 +1,3 @@
-export const runtime = "edge";
 import { connectToDB } from "@/lib/db";
 import Lead from "@/models/Lead";
 
