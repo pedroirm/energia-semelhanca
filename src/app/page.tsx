@@ -3,9 +3,10 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function Home() {
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     fullName: "",
     cpf: "",
+    cep: "",
     street: "",
     number: "",
     neighborhood: "",
@@ -16,27 +17,70 @@ export default function Home() {
     email: "",
   });
 
-  const [success, setSuccess] = useState(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  const handleSubmit = async (e: any) => {
+  const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const cep = e.target.value.replace(/\D/g, "");
+    if (cep.length !== 8) return;
+
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        alert("CEP não encontrado");
+        return;
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        street: data.logradouro || "",
+        neighborhood: data.bairro || "",
+        city: data.localidade || "",
+        state: data.uf || "",
+      }));
+    } catch (error) {
+      alert("Erro ao buscar CEP");
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await fetch("/lead", {
-      method: "POST",
-      body: JSON.stringify(form),
-    });
-    setSuccess(true);
-    setForm({
-      fullName: "",
-      cpf: "",
-      street: "",
-      number: "",
-      neighborhood: "",
-      complement: "",
-      city: "",
-      state: "",
-      phone: "",
-      email: "",
-    });
+
+    try {
+      const response = await fetch("/lead", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error("Erro ao enviar");
+
+      alert("Enviado com sucesso!");
+      setFormData({
+        fullName: "",
+        cpf: "",
+        cep: "",
+        street: "",
+        number: "",
+        neighborhood: "",
+        complement: "",
+        city: "",
+        state: "",
+        phone: "",
+        email: "",
+      });
+    } catch (error) {
+      alert("Erro ao enviar");
+    }
   };
 
   return (
@@ -89,80 +133,38 @@ export default function Home() {
         valores e sempre buscar evoluir, independentemente das adversidades.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-        <input
-          placeholder="Nome completo"
-          value={form.fullName}
-          onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="CPF"
-          value={form.cpf}
-          onChange={(e) => setForm({ ...form, cpf: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Rua"
-          value={form.street}
-          onChange={(e) => setForm({ ...form, street: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Número"
-          value={form.number}
-          onChange={(e) => setForm({ ...form, number: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Bairro"
-          value={form.neighborhood}
-          onChange={(e) => setForm({ ...form, neighborhood: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Complemento"
-          value={form.complement}
-          onChange={(e) => setForm({ ...form, complement: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Cidade"
-          value={form.city}
-          onChange={(e) => setForm({ ...form, city: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Estado"
-          value={form.state}
-          onChange={(e) => setForm({ ...form, state: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Telefone"
-          value={form.phone}
-          onChange={(e) => setForm({ ...form, phone: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="border p-2 w-full rounded"
-        />
+      <form onSubmit={handleSubmit} className="max-w-lg mx-auto mt-8">
+        {[
+          { name: "fullName", placeholder: "Nome completo" },
+          { name: "cpf", placeholder: "CPF" },
+          { name: "cep", placeholder: "CEP", onBlur: handleCepBlur },
+          { name: "street", placeholder: "Rua" },
+          { name: "number", placeholder: "Número" },
+          { name: "neighborhood", placeholder: "Bairro" },
+          { name: "complement", placeholder: "Complemento" },
+          { name: "city", placeholder: "Cidade" },
+          { name: "state", placeholder: "Estado" },
+          { name: "phone", placeholder: "Telefone" },
+          { name: "email", placeholder: "Email" },
+        ].map((field) => (
+          <input
+            key={field.name}
+            type="text"
+            name={field.name}
+            placeholder={field.placeholder}
+            value={(formData as any)[field.name]}
+            onChange={handleChange}
+            onBlur={(field as any).onBlur}
+            className="w-full rounded border border-white bg-black px-4 py-2 text-white mb-2"
+          />
+        ))}
 
         <button
           type="submit"
-          className="bg-red-600 text-white px-4 py-2 rounded w-full"
+          className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition"
         >
           Enviar
         </button>
-
-        {success && (
-          <p className="text-green-600 text-center">
-            Lead cadastrado com sucesso!
-          </p>
-        )}
       </form>
     </main>
   );

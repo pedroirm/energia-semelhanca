@@ -1,3 +1,4 @@
+export const runtime = "edge";
 import { connectToDB } from "@/lib/db";
 import Lead from "@/models/Lead";
 import { NextResponse } from "next/server";
@@ -9,6 +10,7 @@ export async function POST(req: Request) {
   const newLead = await Lead.create({
     fullName: data.fullName,
     cpf: data.cpf,
+    cep: data.cep,
     street: data.street,
     number: data.number,
     neighborhood: data.neighborhood,
