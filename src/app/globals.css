@@ -2,7 +2,7 @@
 
 /* Variáveis de cor padrão (tema escuro por padrão) */
 :root {
-  --background: theme(colors.black);
+  --background: theme(colors.white);
   --foreground: theme(colors.white);
 }
 

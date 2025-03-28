@@ -84,7 +84,7 @@ export default function Home() {
   };
 
   return (
-    <main className="max-w-xl mx-auto py-10 px-4">
+    <main className="max-w-xl mx-auto py-10 px-4 bg-white text-black min-h-screen">
       <Image
         src="/logo.png"
         alt="Logo"
@@ -155,7 +155,7 @@ export default function Home() {
             value={(formData as any)[field.name]}
             onChange={handleChange}
             onBlur={(field as any).onBlur}
-            className="w-full rounded border border-white bg-black px-4 py-2 text-white mb-2"
+            className="w-full rounded border border-black bg-white px-4 py-2 text-black mb-2"
           />
         ))}
 
