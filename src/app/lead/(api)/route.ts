@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import { connectToDB } from "@/lib/db";
 import Lead from "@/models/Lead";
 import { NextResponse } from "next/server";
