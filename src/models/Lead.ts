@@ -28,7 +28,7 @@ const LeadSchema = new Schema<ILead>(
     phone: String,
     email: String,
   },
-  { timestamps: true } // 👈 adiciona createdAt e updatedAt
+  { timestamps: true }
 );
 
 export default mongoose.models.Lead ||
