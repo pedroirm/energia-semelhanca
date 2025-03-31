@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     await connectToDB();
-
+    console.log("URI:", process.env.MONGODB_URI);
     const data = await req.json();
 
     const newLead = await Lead.create({
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       phone: data.phone,
       email: data.email,
     });
-
+    console.log("Lead criado:", newLead);
     return NextResponse.json(newLead, { status: 201 });
   } catch (error) {
     console.error("Erro ao salvar lead:", error);
