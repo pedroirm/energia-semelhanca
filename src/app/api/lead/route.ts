@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       phone: data.phone,
       email: data.email,
     });
-    console.log("Lead criado:", newLead);
+
     return NextResponse.json(newLead, { status: 201 });
   } catch (error) {
     console.error("Erro ao salvar lead:", error);

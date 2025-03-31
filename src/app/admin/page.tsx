@@ -1,11 +1,12 @@
-"use client";
+// "use client";
 export const dynamic = "force-dynamic";
+import ExportButton from "@/components/ExportButton";
 import { connectToDB } from "@/lib/db";
 import Lead from "@/models/Lead";
 
 export default async function AdminPage() {
   await connectToDB();
-  const leads = await Lead.find().sort({ createdAt: 1 }); // do mais antigo para o mais recente
+  const leads = await Lead.find().sort({ createdAt: 1 });
 
   return (
     <html lang="pt-BR">
@@ -13,59 +14,7 @@ export default async function AdminPage() {
         <h1 className="text-2xl font-bold mb-6">Leads cadastrados</h1>
 
         <div className="mb-4">
-          <button
-            onClick={() => {
-              const csvContent = [
-                [
-                  "#",
-                  "Nome",
-                  "CPF",
-                  "Email",
-                  "Telefone",
-                  "Rua",
-                  "Número",
-                  "Bairro",
-                  "Complemento",
-                  "Cidade",
-                  "Estado",
-                  "Data",
-                ].join(","),
-              ];
-
-              leads.forEach((lead: any, index: number) => {
-                csvContent.push(
-                  [
-                    index + 1,
-                    lead.fullName || "",
-                    lead.cpf || "",
-                    lead.email || "",
-                    lead.phone || "",
-                    lead.street || "",
-                    lead.number || "",
-                    lead.neighborhood || "",
-                    lead.complement || "",
-                    lead.city || "",
-                    lead.state || "",
-                    lead.createdAt
-                      ? new Date(lead.createdAt).toLocaleString("pt-BR")
-                      : "",
-                  ].join(",")
-                );
-              });
-
-              const blob = new Blob([csvContent.join("\n")], {
-                type: "text/csv;charset=utf-8;",
-              });
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement("a");
-              link.setAttribute("href", url);
-              link.setAttribute("download", "leads.csv");
-              link.click();
-            }}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Exportar CSV
-          </button>
+          <ExportButton leads={leads} />
         </div>
 
         <div className="overflow-x-auto">
