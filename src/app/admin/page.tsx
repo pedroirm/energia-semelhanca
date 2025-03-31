@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { connectToDB } from "@/lib/db";
 import Lead from "@/models/Lead";
 
