@@ -54,7 +54,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/lead", {
+      const response = await fetch("/lead", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
