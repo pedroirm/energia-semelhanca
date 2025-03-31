@@ -54,7 +54,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/lead", {
+      const response = await fetch("/api/lead", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -133,7 +133,11 @@ export default function Home() {
         valores e sempre buscar evoluir, independentemente das adversidades.
       </p>
 
-      <form onSubmit={handleSubmit} className="max-w-lg mx-auto mt-8">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-lg mx-auto mt-8"
+        method="POST"
+      >
         {[
           { name: "fullName", placeholder: "Nome completo" },
           { name: "cpf", placeholder: "CPF" },

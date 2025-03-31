@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     await connectToDB();
-    console.log("URI:", process.env.MONGODB_URI);
+
     const data = await req.json();
 
     const newLead = await Lead.create({
